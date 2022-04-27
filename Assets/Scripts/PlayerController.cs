@@ -4,16 +4,25 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private Input_PlayerController input;
+    private Rigidbody2D rb;
+    private BoxCollider2D boxCollider2D;
+    private Animator anim;
+
+    [SerializeField] private LayerMask plataformLayerMask;
+
+    [Header("Movement forces")]
     [SerializeField] private float speed;
     [SerializeField] private float jumpForce;
-    [SerializeField] private float fallMultiplier = 3.5f;
-    [SerializeField] private float lowJumpMultiplier = 2f;
+    [SerializeField] private float fallMultiplier;
+    [SerializeField] private float lowJumpMultiplier;
+    [SerializeField] private float rollSpeed;
+
     private float jumpInput;
-
-    private Input_PlayerController input;
-
-    private Rigidbody2D rb;
-    private Animator anim;
+    private bool doubleJump;
+    private float move;
+    private float rollInput;
+    private float rollDelay;
 
     private void Awake()
     {
@@ -33,36 +42,42 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        boxCollider2D = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
     }
 
-    void Update()
+    //used in physics updates 
+    private void FixedUpdate()
     {
         Move();
         Jump();
-        //BetterJump();
+        BetterJump();
+        Roll();
     }
 
     void Move()
     {
-        float move = input.Player.Move.ReadValue<float>();
+        move = input.Player.Move.ReadValue<float>();
 
-        rb.velocity = Vector2.right * move * speed *  Time.deltaTime;
+        rb.velocity = new Vector2(move * speed, rb.velocity.y);
+        FlipAnimation();
+    }
 
-        if (move > 0f)
+    void FlipAnimation()
+    {
+        if (move > 0)
         {
-            transform.eulerAngles = new Vector3(0f, 0f, 0f);
-            anim.SetFloat("runningTrigger", 1f);            
+            anim.SetBool("isRunning", true);
+            transform.eulerAngles = new Vector3(0, 0, 0);
         }
-        else if (move < 0f)
+        else if (move < 0)
         {
-            transform.eulerAngles = new Vector3(0f, 180f, 0f);
-            anim.SetFloat("runningTrigger", 1f);
+            anim.SetBool("isRunning", true);
+            transform.eulerAngles = new Vector3(0, 180, 0);
         }
         else
         {
-            rb.velocity = Vector2.zero;
-            anim.SetFloat("runningTrigger", -1f);
+            anim.SetBool("isRunning", false);
         }
     }
 
@@ -70,25 +85,72 @@ public class PlayerController : MonoBehaviour
     {
         jumpInput = input.Player.Jump.ReadValue<float>();
 
-        if (jumpInput > 0.01f) 
-        { 
-            rb.velocity = Vector2.up * jumpForce * Time.deltaTime;
-        }  
-        if (jumpInput > 0.01f && rb.velocity.x != 0) 
-        { 
-            rb.velocity = Vector2.up * jumpForce * rb.velocity.x * Time.deltaTime;
-        }   
+        if (IsGrounded() && jumpInput > 0.01f)
+        {
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        }
     }
 
-    private void BetterJump()
+    void BetterJump()
     {
         if (rb.velocity.y < 0)
         {
             rb.velocity += Vector2.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+
+            // Maximum fall velocity for NOT enter the ground
+            // Debug.LogWarning(rb.velocity.y);
+            if (rb.velocity.y < -15f) { rb.velocity = Vector2.up * (-15f); }
         }
         else if (rb.velocity.y > 0 && jumpInput == 0)
         {
             rb.velocity += Vector2.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
+    }
+
+    bool IsGrounded()
+    {
+        float extraHeight = 0.5f;
+
+        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.down, extraHeight, plataformLayerMask);
+
+        Color rayColor;
+        if (raycastHit.collider != null)
+        {
+            rayColor = Color.green;
+            anim.SetBool("isGrounded", true);
+        }
+        else
+        {
+            rayColor = Color.red;
+            anim.SetBool("isGrounded", false);
+        }
+        Debug.DrawRay(boxCollider2D.bounds.center, Vector2.down * (extraHeight), rayColor);
+
+        return raycastHit.collider != null;
+    }
+
+    void Roll()
+    {
+        rollInput = input.Player.Roll.ReadValue<float>();
+
+        rollDelay -= Time.deltaTime;
+
+        if (rollInput > 0 && rollDelay <= 0f && IsGrounded() && move != 0)
+        {
+            rb.velocity = new Vector2(move * rollSpeed, rb.velocity.y);
+            anim.SetBool("isRolling", true);
+
+            rollDelay = 0.5f;
+        }
+        else
+        {
+            anim.SetBool("isRolling", false);
+        }
+
+
+        // ao apertar o botao
+        //pequeno dash durante 0.5 segundos
+        // animação
+        //desliga o collisor de dano
     }
 }
