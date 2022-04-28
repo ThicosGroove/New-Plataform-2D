@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Death
   - Foot
+  - Ground
+  - Wall
   layers:
   - Default
   - TransparentFX

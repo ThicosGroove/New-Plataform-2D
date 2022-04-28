@@ -7,6 +7,8 @@ public class EnemyBat : AEnemy
     [SerializeField] private int health;
     [SerializeField] private float speed;
 
+    [SerializeField] private float distanceToWake;
+
     private GameObject player;
 
     protected override void Die()
@@ -29,6 +31,6 @@ public class EnemyBat : AEnemy
 
     private void FixedUpdate()
     {        
-        MovementTowardsPlayer(player);
+        DistanceToWake(player, distanceToWake);
     }
 }

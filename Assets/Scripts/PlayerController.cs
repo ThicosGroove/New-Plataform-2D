@@ -23,6 +23,16 @@ public class PlayerController : MonoBehaviour
     private float move;
     private float rollInput;
     private float rollDelay;
+    private float attackInput;
+    public bool isfacingRight = true;
+
+    [Header("Attack forces")]
+    public GameObject arrowPrefab;
+    public GameObject bow;
+    [SerializeField] private float bowForce;
+    [SerializeField] private float _fireRate;
+
+    private float fireRate;
 
     private void Awake()
     {
@@ -44,6 +54,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         boxCollider2D = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
+        fireRate = _fireRate;
     }
 
     //used in physics updates 
@@ -53,6 +64,7 @@ public class PlayerController : MonoBehaviour
         Jump();
         BetterJump();
         Roll();
+        Attack();
     }
 
     void Move()
@@ -69,11 +81,13 @@ public class PlayerController : MonoBehaviour
         {
             anim.SetBool("isRunning", true);
             transform.eulerAngles = new Vector3(0, 0, 0);
+            isfacingRight = true;
         }
         else if (move < 0)
         {
             anim.SetBool("isRunning", true);
             transform.eulerAngles = new Vector3(0, 180, 0);
+            isfacingRight = false;
         }
         else
         {
@@ -152,5 +166,32 @@ public class PlayerController : MonoBehaviour
         //pequeno dash durante 0.5 segundos
         // animação
         //desliga o collisor de dano
+    }
+
+    void Attack()
+    {
+        attackInput = input.Player.Attack.ReadValue<float>();
+
+        fireRate -= Time.deltaTime;
+
+        if (attackInput > 0.01f)
+        {
+            if (fireRate < 0)
+            {
+                GameObject newArrow = Instantiate(arrowPrefab, bow.transform.position, bow.transform.rotation);
+
+                bowForce = isfacingRight ? bowForce *= (1) : bowForce *= (-1);
+       
+                newArrow.GetComponent<Rigidbody2D>().AddForce(new Vector2(bowForce, 0f));
+                anim.SetBool("isAttacking", true);
+
+                fireRate = _fireRate;
+            }
+        }
+        else
+        {
+            anim.SetBool("isAttacking", false);
+        }
+
     }
 }

@@ -8,7 +8,6 @@ public abstract class AEnemy : MonoBehaviour
     protected float Speed { get; set; }
 
     Rigidbody2D rb;
-    GameObject foot;
 
     [SerializeField] Vector3[] walkPositions;
     private int index;
@@ -16,14 +15,13 @@ public abstract class AEnemy : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        foot = GameObject.FindGameObjectWithTag("Foot");
     }
 
     protected abstract void LostHealth();
 
     protected abstract void Die();
 
-    protected virtual void FreeMovement(float minX, float maxX)
+    protected virtual void FixedMovement(float minX, float maxX)
     {
         rb.velocity = Vector2.MoveTowards(transform.position, walkPositions[index], Speed * Time.deltaTime);
     }
@@ -36,26 +34,31 @@ public abstract class AEnemy : MonoBehaviour
         // Tryed few differents things, these two ways seems to work best for this project 
         rb.MovePosition((Vector2)transform.position + (dir * Speed * Time.deltaTime));
         //rb.velocity = new Vector2(dir.x * Speed, transform.position.y);
-
-        if (dir.x > 0f)
-        {
-            transform.eulerAngles = new Vector3(0, 0, 0);
-        }
-        else
-        {
-            transform.eulerAngles = new Vector3(0, 180f, 0f);
-        }
+       
+        transform.eulerAngles = dir.x > 0f ? new Vector3(0f, 180f, 0f): Vector3.zero;
     }
 
-    void FlipOnPlataform()
+    protected void DistanceToWake(GameObject target, float distToWake)
     {
-        CircleCollider2D footColl = foot.GetComponent<CircleCollider2D>();
+        Vector2 playerPos = target.transform.position;
 
-        
+        float distanceToPlayer = Vector2.Distance(transform.position, playerPos);
+
+        if (distanceToPlayer < distToWake) { MovementTowardsPlayer(target); }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    protected virtual void FreeMovement()
     {
-        
+        int dir;
+        Vector2 lookDirection = transform.eulerAngles;
+        dir = lookDirection.y == 180f ? 1 : -1;
+
+        rb.velocity = new Vector2(dir * Speed * Time.deltaTime, rb.velocity.y);
+    }
+
+    protected virtual void Flip()
+    {
+        transform.localScale = new Vector2(-(Mathf.Sign(Speed)), transform.localScale.y);
+        Speed *= -1;
     }
 }
