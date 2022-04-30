@@ -5,7 +5,8 @@ using UnityEngine;
 public class EnemyBlob : AEnemy
 {
     [SerializeField] float speed;
-    [SerializeField] int health;
+    [SerializeField] int maxHealth;
+    [SerializeField] private int currentHealth;
 
     [SerializeField] float distanceToWake;
 
@@ -16,7 +17,8 @@ public class EnemyBlob : AEnemy
     void Start()
     {
         Speed = speed;
-        Health = health;
+        Health = maxHealth;
+        currentHealth = maxHealth;
 
         player = GameObject.FindGameObjectWithTag("Player");
 
@@ -25,7 +27,10 @@ public class EnemyBlob : AEnemy
 
     private void Update()
     {
+
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, Mathf.NegativeInfinity, initialHeight), transform.position.z);
+
+        HealthBarFiller(currentHealth);
     }
 
     private void FixedUpdate()
@@ -33,19 +38,17 @@ public class EnemyBlob : AEnemy
         DistanceToWake(player, distanceToWake);
     }
 
+    protected override void LostHealth()
+    {
+        currentHealth--;
+
+        if (currentHealth <= 0) { Die(); }
+    }
+
     protected override void Die()
     {
         Destroy(gameObject);
     }
-
-    protected override void LostHealth()
-    {
-        health--;
-
-        if (health <= 0) { Die(); }
-
-    }
-
     //private void OnCollisionEnter2D(Collision2D collision)
     //{
     //    if (collision.gameObject.CompareTag("Player")) { return; }

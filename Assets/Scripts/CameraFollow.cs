@@ -7,6 +7,8 @@ public class CameraFollow : MonoBehaviour
     [Header("Camera Boundaries")]
     [SerializeField] private float minX;
     [SerializeField] private float maxX;
+    [SerializeField] private float minY;
+    [SerializeField] private float maxY;
 
     [SerializeField] private float smooth;
 
@@ -20,9 +22,12 @@ public class CameraFollow : MonoBehaviour
 
     private void LateUpdate()
     {
-        float following = player.position.x;
-        float clampX = Mathf.Clamp(following, minX, maxX);
+        Vector2 following = player.position;
+        float clampX = Mathf.Clamp(following.x, minX, maxX);
+        float clampY = Mathf.Clamp(following.y, minY, maxY);
 
-        transform.position = Vector3.Lerp(transform.position, new Vector3(clampX, 0f, -10f) , smooth * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, new Vector3(clampX, clampY, -10f) , smooth * Time.deltaTime);
+        //transform.position = Vector3.Lerp(transform.position, new Vector3(0f, clampY, -10f) , smooth * Time.deltaTime);
+
     }
 }

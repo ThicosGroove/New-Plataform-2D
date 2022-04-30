@@ -19,7 +19,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float rollSpeed;
 
     private float jumpInput;
-    private bool doubleJump;
     private float move;
     private float rollInput;
     private float rollDelay;
@@ -67,7 +66,6 @@ public class PlayerController : MonoBehaviour
         BetterJump();
         Roll();
         Attack();
-
     }
 
     void Move()

@@ -38,6 +38,8 @@ public class ArrowBehaviour : MonoBehaviour
 
             particle.Play();
             KnockBack(collision.gameObject);
+
+            Destroy(gameObject, 1f);
         }
     }
 

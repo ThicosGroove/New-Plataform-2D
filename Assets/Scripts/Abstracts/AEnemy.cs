@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class AEnemy : MonoBehaviour
 {
     protected int Health { get; set; }
     protected float Speed { get; set; }
+
+    [SerializeField] private GameObject healtBar;
+    [SerializeField] private Image filledHealtBar;
 
     Rigidbody2D rb;
 
@@ -17,6 +21,14 @@ public abstract class AEnemy : MonoBehaviour
     protected abstract void LostHealth();
 
     protected abstract void Die();
+
+    protected virtual void HealthBarFiller(int currentHealth)
+    {
+        float fillAmountPercentage = currentHealth / Health;
+        float lerpSpeed = 4f * Time.deltaTime;
+
+        filledHealtBar.fillAmount = Mathf.Lerp(filledHealtBar.fillAmount, fillAmountPercentage, lerpSpeed);
+    }
 
     protected virtual void MovementTowardsPlayer(GameObject target)
     {
