@@ -8,6 +8,7 @@ TagManager:
   - Foot
   - Ground
   - Wall
+  - Bow
   layers:
   - Default
   - TransparentFX

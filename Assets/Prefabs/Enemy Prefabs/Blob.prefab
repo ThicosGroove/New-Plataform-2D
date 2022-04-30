@@ -118,9 +118,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.14716813}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.35283187
 --- !u!50 &-4700236065848800630
 Rigidbody2D:
   serializedVersion: 4
@@ -154,7 +154,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01a3885559ec2164dbe52e3924a400e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkPositions: []
   speed: 1.5
-  health: 0
+  health: 3
   distanceToWake: 5

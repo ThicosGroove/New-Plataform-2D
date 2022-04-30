@@ -9,9 +9,6 @@ public abstract class AEnemy : MonoBehaviour
 
     Rigidbody2D rb;
 
-    [SerializeField] Vector3[] walkPositions;
-    private int index;
-
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -20,11 +17,6 @@ public abstract class AEnemy : MonoBehaviour
     protected abstract void LostHealth();
 
     protected abstract void Die();
-
-    protected virtual void FixedMovement(float minX, float maxX)
-    {
-        rb.velocity = Vector2.MoveTowards(transform.position, walkPositions[index], Speed * Time.deltaTime);
-    }
 
     protected virtual void MovementTowardsPlayer(GameObject target)
     {
@@ -60,5 +52,15 @@ public abstract class AEnemy : MonoBehaviour
     {
         transform.localScale = new Vector2(-(Mathf.Sign(Speed)), transform.localScale.y);
         Speed *= -1;
+    }
+
+    protected void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player")) { return; }
+
+        if (collision.gameObject.GetComponent<ArrowBehaviour>())
+        {
+            LostHealth();
+        }
     }
 }

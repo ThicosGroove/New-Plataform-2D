@@ -24,7 +24,8 @@ public class PlayerController : MonoBehaviour
     private float rollInput;
     private float rollDelay;
     private float attackInput;
-    public bool isfacingRight = true;
+
+    public bool isFacingRight = true;
 
     [Header("Attack forces")]
     public GameObject arrowPrefab;
@@ -55,6 +56,7 @@ public class PlayerController : MonoBehaviour
         boxCollider2D = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
         fireRate = _fireRate;
+
     }
 
     //used in physics updates 
@@ -65,6 +67,7 @@ public class PlayerController : MonoBehaviour
         BetterJump();
         Roll();
         Attack();
+
     }
 
     void Move()
@@ -77,17 +80,18 @@ public class PlayerController : MonoBehaviour
 
     void FlipAnimation()
     {
+
         if (move > 0)
         {
             anim.SetBool("isRunning", true);
             transform.eulerAngles = new Vector3(0, 0, 0);
-            isfacingRight = true;
+            isFacingRight = true;
         }
         else if (move < 0)
         {
             anim.SetBool("isRunning", true);
             transform.eulerAngles = new Vector3(0, 180, 0);
-            isfacingRight = false;
+            isFacingRight = false;
         }
         else
         {
@@ -102,6 +106,10 @@ public class PlayerController : MonoBehaviour
         if (IsGrounded() && jumpInput > 0.01f)
         {
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+
+            // Maximum jump velocity
+            // Debug.LogWarning(rb.velocity.y);
+            if (rb.velocity.y > 8f) { rb.velocity = Vector2.up * 8f; }
         }
     }
 
@@ -112,7 +120,7 @@ public class PlayerController : MonoBehaviour
             rb.velocity += Vector2.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
 
             // Maximum fall velocity for NOT enter the ground
-            // Debug.LogWarning(rb.velocity.y);
+            // Debug.LogWarning(rb.velocity.y);            
             if (rb.velocity.y < -15f) { rb.velocity = Vector2.up * (-15f); }
         }
         else if (rb.velocity.y > 0 && jumpInput == 0)
@@ -180,9 +188,10 @@ public class PlayerController : MonoBehaviour
             {
                 GameObject newArrow = Instantiate(arrowPrefab, bow.transform.position, bow.transform.rotation);
 
-                bowForce = isfacingRight ? bowForce *= (1) : bowForce *= (-1);
-       
-                newArrow.GetComponent<Rigidbody2D>().AddForce(new Vector2(bowForce, 0f));
+                if (isFacingRight) { newArrow.GetComponent<Rigidbody2D>().AddForce(Vector2.right * bowForce, ForceMode2D.Impulse); }
+
+                if (!isFacingRight) { newArrow.GetComponent<Rigidbody2D>().AddForce(Vector2.left * bowForce, ForceMode2D.Impulse); }
+                              
                 anim.SetBool("isAttacking", true);
 
                 fireRate = _fireRate;
@@ -192,6 +201,5 @@ public class PlayerController : MonoBehaviour
         {
             anim.SetBool("isAttacking", false);
         }
-
     }
 }

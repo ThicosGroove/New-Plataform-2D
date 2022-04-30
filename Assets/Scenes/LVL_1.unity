@@ -16011,6 +16011,10 @@ PrefabInstance:
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 456762307}
+    - target: {fileID: 1852258512983953770, guid: 6eb6af5da76ff5b4884035f2f55bbee0, type: 3}
+      propertyPath: bowForce
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 1852258512983953773, guid: 6eb6af5da76ff5b4884035f2f55bbee0, type: 3}
       propertyPath: m_RootOrder
       value: 4

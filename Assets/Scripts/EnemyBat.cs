@@ -11,16 +11,6 @@ public class EnemyBat : AEnemy
 
     private GameObject player;
 
-    protected override void Die()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    protected override void LostHealth()
-    {
-        throw new System.NotImplementedException();
-    }
-
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -32,5 +22,17 @@ public class EnemyBat : AEnemy
     private void FixedUpdate()
     {        
         DistanceToWake(player, distanceToWake);
+    }
+
+    protected override void Die()
+    {
+        Destroy(gameObject);
+    }
+
+    protected override void LostHealth()
+    {
+        health--;
+
+        if (health <= 0) { Die(); }
     }
 }

@@ -128,6 +128,7 @@ MonoBehaviour:
   fallMultiplier: 5
   lowJumpMultiplier: 4
   rollSpeed: 30
+  isFacingRight: 1
   arrowPrefab: {fileID: 2704019606709598039, guid: 3e212a099c4f9b84998340370d86455c, type: 3}
   bow: {fileID: 3935759770119700777}
   bowForce: 500
@@ -220,7 +221,7 @@ GameObject:
   - component: {fileID: 5984354076836596352}
   m_Layer: 0
   m_Name: Bow
-  m_TagString: Untagged
+  m_TagString: Bow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

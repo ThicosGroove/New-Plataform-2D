@@ -175,9 +175,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f28a9e063e9fae2488ba0d82ac5e676d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkPositions: []
   speed: 2
-  health: 0
+  health: 1
 --- !u!50 &8695442066055933967
 Rigidbody2D:
   serializedVersion: 4

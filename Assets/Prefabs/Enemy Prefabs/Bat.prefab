@@ -164,7 +164,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64a9bbba1ae7dc34490a6816b965e3c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkPositions: []
-  health: 0
+  health: 2
   speed: 2
   distanceToWake: 6

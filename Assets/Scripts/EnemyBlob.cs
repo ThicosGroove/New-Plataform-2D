@@ -35,13 +35,24 @@ public class EnemyBlob : AEnemy
 
     protected override void Die()
     {
-        throw new System.NotImplementedException();
+        Destroy(gameObject);
     }
 
     protected override void LostHealth()
     {
-        throw new System.NotImplementedException();
+        health--;
+
+        if (health <= 0) { Die(); }
+
     }
 
-    // Update is called once per frame
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.CompareTag("Player")) { return; }
+
+    //    if (collision.gameObject.GetComponent<ArrowBehaviour>())
+    //    {
+    //        LostHealth();
+    //    }      
+    //}
 }

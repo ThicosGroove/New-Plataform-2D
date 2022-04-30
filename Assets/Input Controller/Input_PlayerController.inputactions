@@ -110,6 +110,39 @@
                     "isPartOfComposite": true
                 },
                 {
+                    "name": "Stick Gamepad",
+                    "id": "079f6aa3-a2da-4049-a35b-85d13ed28ede",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "d2e66886-29f3-4216-8b37-dda37ad6497f",
+                    "path": "<Gamepad>/leftStick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "aaf75fd6-e88f-4a45-a903-6dce2a110cfe",
+                    "path": "<Gamepad>/leftStick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
                     "name": "",
                     "id": "64478d32-fd44-4844-bcc0-dafd42ad73ac",
                     "path": "<Keyboard>/space",
@@ -133,6 +166,17 @@
                 },
                 {
                     "name": "",
+                    "id": "31b63a9f-233b-409c-a733-974e53881de0",
+                    "path": "<XInputController>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "e23bff8c-ee70-4a50-a4cd-48f766d8d646",
                     "path": "<Keyboard>/leftShift",
                     "interactions": "",
@@ -144,8 +188,30 @@
                 },
                 {
                     "name": "",
+                    "id": "05404ec2-7e72-4611-b4a2-c44844a0b554",
+                    "path": "<XInputController>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Roll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "767bb097-aa90-4f78-945e-87f7a6499ae6",
                     "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8a00c003-0862-4233-9558-6b61f1233030",
+                    "path": "<XInputController>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
