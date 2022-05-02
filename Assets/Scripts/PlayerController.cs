@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     private Input_PlayerController input;
     private Rigidbody2D rb;
     private BoxCollider2D boxCollider2D;
+    private CapsuleCollider2D capsuleCollider2D;
     private Animator anim;
 
     [SerializeField] private LayerMask plataformLayerMask;
@@ -24,7 +25,9 @@ public class PlayerController : MonoBehaviour
     private float rollDelay;
     private float attackInput;
 
-    public bool isFacingRight = true;
+    private bool isFacingRight = true;
+
+    private RaycastHit2D raycastHit;
 
     [Header("Attack forces")]
     public GameObject arrowPrefab;
@@ -53,6 +56,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         boxCollider2D = GetComponent<BoxCollider2D>();
+        capsuleCollider2D = GetComponent<CapsuleCollider2D>();
         anim = GetComponent<Animator>();
         fireRate = _fireRate;
 
@@ -61,6 +65,8 @@ public class PlayerController : MonoBehaviour
     //used in physics updates 
     private void FixedUpdate()
     {
+
+
         Move();
         Jump();
         BetterJump();
@@ -131,7 +137,7 @@ public class PlayerController : MonoBehaviour
     {
         float extraHeight = 0.5f;
 
-        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.down, extraHeight, plataformLayerMask);
+        raycastHit = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.down, extraHeight, plataformLayerMask);
 
         Color rayColor;
         if (raycastHit.collider != null)
@@ -157,21 +163,35 @@ public class PlayerController : MonoBehaviour
 
         if (rollInput > 0 && rollDelay <= 0f && IsGrounded() && move != 0)
         {
+
             rb.velocity = new Vector2(move * rollSpeed, rb.velocity.y);
             anim.SetBool("isRolling", true);
+
+            StayOnGround();
 
             rollDelay = 0.5f;
         }
         else
         {
             anim.SetBool("isRolling", false);
-        }
 
+        }
 
         // ao apertar o botao
         //pequeno dash durante 0.5 segundos
         // animação
         //desliga o collisor de dano
+    }
+
+    void StayOnGround()
+    {
+        float distToGround = raycastHit.distance;
+
+        transform.position = new Vector2(transform.position.x, transform.position.y - distToGround);
+        rb.velocity = new Vector2(rb.velocity.x, 0f);
+
+        Debug.LogWarning(distToGround);
+
     }
 
     void Attack()
@@ -189,7 +209,7 @@ public class PlayerController : MonoBehaviour
                 if (isFacingRight) { newArrow.GetComponent<Rigidbody2D>().AddForce(Vector2.right * bowForce, ForceMode2D.Impulse); }
 
                 if (!isFacingRight) { newArrow.GetComponent<Rigidbody2D>().AddForce(Vector2.left * bowForce, ForceMode2D.Impulse); }
-                              
+
                 anim.SetBool("isAttacking", true);
 
                 fireRate = _fireRate;

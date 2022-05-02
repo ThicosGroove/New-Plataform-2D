@@ -4,43 +4,53 @@ using UnityEngine;
 
 public class EnemyBlob : AEnemy
 {
-    [SerializeField] float speed;
-    [SerializeField] int maxHealth;
-    [SerializeField] private int currentHealth;
+    [SerializeField] float _patrolSpeed;
+    [SerializeField] float _chaseSpeed;
+    [SerializeField] float maxHealth;
+    [SerializeField] private float currentHealth;
 
     [SerializeField] float distanceToWake;
 
     private GameObject player;
 
-    private float initialHeight;
-
     void Start()
     {
-        Speed = speed;
+        player = GameObject.FindGameObjectWithTag("Player");
+        state = State.Patrol;
+
+        patrolSpeed = _patrolSpeed;
+        chaseSpeed = _chaseSpeed;
         Health = maxHealth;
         currentHealth = maxHealth;
-
-        player = GameObject.FindGameObjectWithTag("Player");
-
-        initialHeight = transform.position.y;
     }
 
     private void Update()
-    {
-
-        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, Mathf.NegativeInfinity, initialHeight), transform.position.z);
-
-        HealthBarFiller(currentHealth);
+    {           
+        HealthBarFiller(currentHealth, 4f);       
     }
 
     private void FixedUpdate()
     {
-        DistanceToWake(player, distanceToWake);
+        switch (state)
+        {
+            case State.Sleep:
+                break;
+            case State.Patrol:
+                FreeMovement();
+                DistanceToWake(player, distanceToWake);
+                break;
+            case State.Chase:
+                MovementTowardsPlayer(player);
+                DistanceToWake(player, distanceToWake);
+                break;
+            default:
+                break;
+        }       
     }
 
     protected override void LostHealth()
     {
-        currentHealth--;
+        currentHealth--;       
 
         if (currentHealth <= 0) { Die(); }
     }
@@ -49,13 +59,7 @@ public class EnemyBlob : AEnemy
     {
         Destroy(gameObject);
     }
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    if (collision.gameObject.CompareTag("Player")) { return; }
 
-    //    if (collision.gameObject.GetComponent<ArrowBehaviour>())
-    //    {
-    //        LostHealth();
-    //    }      
-    //}
+
+ 
 }

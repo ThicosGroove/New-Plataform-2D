@@ -4,45 +4,59 @@ using UnityEngine;
 
 public class EnemySlime : AEnemy
 {
-    [SerializeField] float speed;
-    [SerializeField] int health;
+    [SerializeField] float _patrolSpeed;
+    [SerializeField] float _chaseSpeed;
+    [SerializeField] float maxHealth;
+    [SerializeField] private float currentHealth;
+
+    [SerializeField] float distanceToWake;
+    private GameObject player;
 
     void Start()
     {
-        Speed = speed;
-        Health = health;
+        player = GameObject.FindGameObjectWithTag("Player");
+        state = State.Patrol;
+
+        patrolSpeed = _patrolSpeed;
+        chaseSpeed = _chaseSpeed;
+        Health = maxHealth;
+        currentHealth = maxHealth;
+    }
+
+    private void Update()
+    {
+        HealthBarFiller(currentHealth, 8f);
     }
 
     private void FixedUpdate()
     {
-        FreeMovement();
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
+        switch (state)
         {
-            Flip();
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("Wall"))
-        {
-            Flip();
-        }
+            case State.Sleep:
+                break;
+            case State.Patrol:
+                FreeMovement();
+                DistanceToWake(player, distanceToWake);
+                break;
+            case State.Chase:
+                MovementTowardsPlayer(player);
+                DistanceToWake(player, distanceToWake);
+                StayOnGround();
+                break;
+            default:
+                break;
+        }      
     }
 
     protected override void Die()
     {
-        Destroy(gameObject);
+        Destroy(gameObject, 0.5f);
     }
 
     protected override void LostHealth()
     {
-        health--;
+        currentHealth--;
 
-        if (health <= 0) { Die(); }
+        if (currentHealth <= 0) { Die(); }
     }
 }

@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class EnemyBat : AEnemy
 {
-    [SerializeField] private int health;
-    [SerializeField] private float speed;
+    [SerializeField] float _patrolSpeed;
+    [SerializeField] float _chaseSpeed;
+    [SerializeField] float maxHealth;
+    [SerializeField] private float currentHealth;
 
     [SerializeField] private float distanceToWake;
 
@@ -15,24 +17,32 @@ public class EnemyBat : AEnemy
     {
         player = GameObject.FindGameObjectWithTag("Player");
 
-        Health = health;
-        Speed = speed;
+        patrolSpeed = _patrolSpeed;
+        chaseSpeed = _chaseSpeed;
+        Health = maxHealth;
+        currentHealth = maxHealth;
+    }
+
+    private void Update()
+    {
+        HealthBarFiller(currentHealth, 6f);
     }
 
     private void FixedUpdate()
-    {        
+    {
+        MovementTowardsPlayer(player);
         DistanceToWake(player, distanceToWake);
     }
 
     protected override void Die()
     {
-        Destroy(gameObject);
+        Destroy(gameObject, 0.5f);
     }
 
     protected override void LostHealth()
     {
-        health--;
+        currentHealth--;
 
-        if (health <= 0) { Die(); }
+        if (currentHealth <= 0) { Die(); }
     }
 }

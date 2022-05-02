@@ -11,8 +11,7 @@ public class ArrowBehaviour : MonoBehaviour
     Rigidbody2D rb;
     BoxCollider2D boxCollider;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
@@ -21,6 +20,8 @@ public class ArrowBehaviour : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.LogWarning(collision.collider.name);
+
         if (collision.collider.CompareTag("Player")) { return; }
         if (collision.collider.CompareTag("Bow")) { return; }
 
@@ -31,8 +32,6 @@ public class ArrowBehaviour : MonoBehaviour
 
         if (collision.collider.GetComponent<AEnemy>())
         {
-            Debug.Log("Acertou!!");
-
             boxCollider.enabled = false;
             sprite.enabled = false;
 

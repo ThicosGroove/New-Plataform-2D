@@ -5,13 +5,24 @@ using UnityEngine.UI;
 
 public abstract class AEnemy : MonoBehaviour
 {
-    protected int Health { get; set; }
-    protected float Speed { get; set; }
+    [SerializeField] private LayerMask plataformLayerMask;
+
+    protected float Health { get; set; }
+    protected float patrolSpeed { get; set; }
+    protected float chaseSpeed { get; set; }
 
     [SerializeField] private GameObject healtBar;
     [SerializeField] private Image filledHealtBar;
 
     Rigidbody2D rb;
+
+    protected State state;
+    protected enum State
+    {
+        Sleep,
+        Patrol,
+        Chase
+    }
 
     private void Awake()
     {
@@ -22,10 +33,10 @@ public abstract class AEnemy : MonoBehaviour
 
     protected abstract void Die();
 
-    protected virtual void HealthBarFiller(int currentHealth)
+    protected virtual void HealthBarFiller(float currentHealth, float filledSpeed)
     {
         float fillAmountPercentage = currentHealth / Health;
-        float lerpSpeed = 4f * Time.deltaTime;
+        float lerpSpeed = filledSpeed * Time.deltaTime;
 
         filledHealtBar.fillAmount = Mathf.Lerp(filledHealtBar.fillAmount, fillAmountPercentage, lerpSpeed);
     }
@@ -35,10 +46,9 @@ public abstract class AEnemy : MonoBehaviour
         Vector3 playerPos = target.transform.position;
         Vector2 dir = (playerPos - transform.position).normalized;
 
-        // Tryed few differents things, these two ways seems to work best for this project 
-        rb.MovePosition((Vector2)transform.position + (dir * Speed * Time.deltaTime));
-        //rb.velocity = new Vector2(dir.x * Speed, transform.position.y);
-       
+        rb.MovePosition((Vector2)transform.position + (dir * chaseSpeed * Time.deltaTime));
+        //StayOnGround();
+
         transform.eulerAngles = dir.x > 0f ? new Vector3(0f, 180f, 0f): Vector3.zero;
     }
 
@@ -48,7 +58,14 @@ public abstract class AEnemy : MonoBehaviour
 
         float distanceToPlayer = Vector2.Distance(transform.position, playerPos);
 
-        if (distanceToPlayer < distToWake) { MovementTowardsPlayer(target); }
+        if (distanceToPlayer < distToWake) 
+        {
+            state = State.Chase;
+        }
+        else
+        {
+            state = State.Patrol;
+        }
     }
 
     protected virtual void FreeMovement()
@@ -57,13 +74,13 @@ public abstract class AEnemy : MonoBehaviour
         Vector2 lookDirection = transform.eulerAngles;
         dir = lookDirection.y == 180f ? 1 : -1;
 
-        rb.velocity = new Vector2(dir * Speed * Time.deltaTime, rb.velocity.y);
+        rb.velocity = new Vector2(dir * patrolSpeed, rb.velocity.y);
     }
 
     protected virtual void Flip()
     {
-        transform.localScale = new Vector2(-(Mathf.Sign(Speed)), transform.localScale.y);
-        Speed *= -1;
+        transform.localScale = new Vector2(-(Mathf.Sign(patrolSpeed)), transform.localScale.y);
+        patrolSpeed *= -1;
     }
 
     protected void OnCollisionEnter2D(Collision2D collision)
@@ -74,5 +91,39 @@ public abstract class AEnemy : MonoBehaviour
         {
             LostHealth();
         }
+    }
+
+    protected void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            Flip();
+        }
+    }
+
+    protected void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Wall") || other.gameObject.GetComponent<AEnemy>())
+        {
+            Flip();
+        }
+    }
+
+    protected virtual void StayOnGround()
+    {
+        RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, Vector2.down, 3f, plataformLayerMask);
+
+        bool isGrounded = raycastHit2D.collider;
+
+        float maxHeight = 1f;
+        float distToGround = raycastHit2D.distance;
+        Debug.LogWarning(distToGround);
+
+        if (raycastHit2D.distance > distToGround)
+        {
+            raycastHit2D.distance = maxHeight;
+        }
+
+        //transform.position = new Vector2(rb.velocity.x, 3.66f);
     }
 }
