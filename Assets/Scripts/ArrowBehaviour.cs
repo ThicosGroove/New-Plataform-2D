@@ -20,8 +20,6 @@ public class ArrowBehaviour : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.LogWarning(collision.collider.name);
-
         if (collision.collider.CompareTag("Player")) { return; }
         if (collision.collider.CompareTag("Bow")) { return; }
 
@@ -38,7 +36,6 @@ public class ArrowBehaviour : MonoBehaviour
             particle.Play();
             KnockBack(collision.gameObject);
 
-            //rb.velocity = Vector2.zero;
             rb.bodyType = RigidbodyType2D.Kinematic;
             Destroy(gameObject, 1f);
         }

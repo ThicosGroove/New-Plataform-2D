@@ -11,10 +11,9 @@ public abstract class AEnemy : MonoBehaviour
     protected float patrolSpeed { get; set; }
     protected float chaseSpeed { get; set; }
 
-    Vector2 lookDirection;
-
     [SerializeField] private GameObject healtBar;
     [SerializeField] private Image filledHealtBar;
+    private Animator anim;
 
     Rigidbody2D rb;
 
@@ -29,11 +28,8 @@ public abstract class AEnemy : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-    }
-
-    private void Start()
-    {
-        lookDirection = transform.eulerAngles;
+        anim = GetComponent<Animator>();
+        healtBar.gameObject.SetActive(false);
     }
 
     protected abstract void LostHealth();
@@ -53,9 +49,13 @@ public abstract class AEnemy : MonoBehaviour
         Vector3 playerPos = target.transform.position;
         Vector2 playerDir = (playerPos - transform.position).normalized;
 
-        transform.eulerAngles = playerDir.x > 0f ? new Vector3(0f, 180f, 0f): Vector3.zero;
+        transform.eulerAngles = playerDir.x > 0f ? new Vector3(0f, 180f, 0f) : Vector3.zero;
 
-        rb.velocity = new Vector2(playerDir.x * chaseSpeed, rb.velocity.y);
+        if (this.GetComponent<EnemyBat>())
+        {
+            rb.velocity = new Vector2(playerDir.x * chaseSpeed, playerDir.y * chaseSpeed);
+        }
+        else { rb.velocity = new Vector2(playerDir.x * chaseSpeed, rb.velocity.y); }
     }
 
     protected virtual void PatrolMovement()
@@ -77,43 +77,39 @@ public abstract class AEnemy : MonoBehaviour
         state = distanceToPlayer < distToWake ? State.Chase : State.Patrol;
     }
 
-    protected virtual void StayOnGround()
-    {
-        RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, Vector2.down, 3f, plataformLayerMask);
-
-        bool isGrounded = raycastHit2D.collider;
-
-        float maxHeight = 1f;
-        float distToGround = raycastHit2D.distance;
-        Debug.LogWarning(distToGround);
-
-        if (raycastHit2D.distance > distToGround)
-        {
-            raycastHit2D.distance = maxHeight;
-        }
-
-        //transform.position = new Vector2(rb.velocity.x, 3.66f);
-    }
-
     protected virtual void Flip()
     {
         transform.localScale = new Vector2(-(Mathf.Sign(patrolSpeed)), transform.localScale.y);
         patrolSpeed *= -1;
     }
 
+    IEnumerator PlayHitAnimation()
+    {
+        anim.SetBool("isHit", true);
+
+        yield return new WaitForSeconds(0.15f);
+        
+        anim.SetBool("isHit", false);
+    }
+
+    // For main Body, Hit by Player and Arrow
     protected void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player")) { return; }
 
         if (collision.gameObject.GetComponent<ArrowBehaviour>())
         {
+            healtBar.gameObject.SetActive(true);
+            StartCoroutine(PlayHitAnimation());
+
             LostHealth();
         }
     }
 
+    // Both Triggers are For foot, used to flip
     protected void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (!this.GetComponent<EnemyBat>() && collision.gameObject.CompareTag("Ground"))
         {
             Flip();
         }
@@ -121,7 +117,14 @@ public abstract class AEnemy : MonoBehaviour
 
     protected void OnTriggerEnter2D(Collider2D other)
     {
+        // any enemy flips if hit each other or a wall
         if (other.gameObject.CompareTag("Wall") || other.gameObject.GetComponent<AEnemy>())
+        {
+            Flip();
+        }
+
+        // because bat it's not on the ground, only it flips when touch a ground tile. Others are arleady in touch.
+        if (this.GetComponent<EnemyBat>() && other.gameObject.CompareTag("Ground"))
         {
             Flip();
         }

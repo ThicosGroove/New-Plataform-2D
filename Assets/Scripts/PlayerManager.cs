@@ -1,37 +1,66 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
 {
     public GameManager gameManager;
 
-    // Start is called before the first frame update
-    void Start()
+    private BoxCollider2D boxCollider2D;
+
+    [SerializeField] private Image PlayerFilledHealthBar;
+    [SerializeField] private float playerMaxHeatlh;
+    private float currentHealth;
+
+
+    private void Start()
     {
-        
+        currentHealth = playerMaxHeatlh;
+        boxCollider2D = GetComponentInChildren<BoxCollider2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        HealthBarFiller();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void LostHealth()
     {
-        if (collision.gameObject.CompareTag("Death"))
+        currentHealth--;
+
+        if (currentHealth <= 0)
         {
-            gameManager.ReloadScene();
+            Die();
         }
+    }
+
+    private void HealthBarFiller()
+    {
+        float fillAmountPercentage = currentHealth / playerMaxHeatlh;
+        float lerpSpeed = 4f * Time.deltaTime;
+
+        PlayerFilledHealthBar.fillAmount = Mathf.Lerp(PlayerFilledHealthBar.fillAmount, fillAmountPercentage, lerpSpeed);
+    }
+
+    private void Die()
+    {
+        gameManager.ReloadScene();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.gameObject.GetComponent<AEnemy>() && this.boxCollider2D)
+        {
+            Debug.LogWarning("Tomou dano inimigo");
+            LostHealth();
+        }
+
         if (collision.gameObject.CompareTag("Death"))
         {
-            gameManager.ReloadScene();
+            Die();
         }
+
     }
 
 }

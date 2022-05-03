@@ -62,6 +62,15 @@ public partial class @Input_PlayerController : IInputActionCollection2, IDisposa
                     ""processors"": """",
                     ""interactions"": ""Press"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause Controller"",
+                    ""type"": ""Button"",
+                    ""id"": ""83c312d7-14f0-4710-9e84-b97c648f0287"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -240,6 +249,17 @@ public partial class @Input_PlayerController : IInputActionCollection2, IDisposa
                     ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""58e96088-1445-4154-835c-fda299d72423"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause Controller"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -252,6 +272,7 @@ public partial class @Input_PlayerController : IInputActionCollection2, IDisposa
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Roll = m_Player.FindAction("Roll", throwIfNotFound: true);
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
+        m_Player_PauseController = m_Player.FindAction("Pause Controller", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -315,6 +336,7 @@ public partial class @Input_PlayerController : IInputActionCollection2, IDisposa
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Roll;
     private readonly InputAction m_Player_Attack;
+    private readonly InputAction m_Player_PauseController;
     public struct PlayerActions
     {
         private @Input_PlayerController m_Wrapper;
@@ -323,6 +345,7 @@ public partial class @Input_PlayerController : IInputActionCollection2, IDisposa
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Roll => m_Wrapper.m_Player_Roll;
         public InputAction @Attack => m_Wrapper.m_Player_Attack;
+        public InputAction @PauseController => m_Wrapper.m_Player_PauseController;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -344,6 +367,9 @@ public partial class @Input_PlayerController : IInputActionCollection2, IDisposa
                 @Attack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
                 @Attack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
                 @Attack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
+                @PauseController.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPauseController;
+                @PauseController.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPauseController;
+                @PauseController.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPauseController;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -360,6 +386,9 @@ public partial class @Input_PlayerController : IInputActionCollection2, IDisposa
                 @Attack.started += instance.OnAttack;
                 @Attack.performed += instance.OnAttack;
                 @Attack.canceled += instance.OnAttack;
+                @PauseController.started += instance.OnPauseController;
+                @PauseController.performed += instance.OnPauseController;
+                @PauseController.canceled += instance.OnPauseController;
             }
         }
     }
@@ -370,5 +399,6 @@ public partial class @Input_PlayerController : IInputActionCollection2, IDisposa
         void OnJump(InputAction.CallbackContext context);
         void OnRoll(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
+        void OnPauseController(InputAction.CallbackContext context);
     }
 }

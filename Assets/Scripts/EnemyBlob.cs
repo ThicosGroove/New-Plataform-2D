@@ -26,7 +26,7 @@ public class EnemyBlob : AEnemy
 
     private void Update()
     {           
-        HealthBarFiller(currentHealth, 4f);       
+        HealthBarFiller(currentHealth, 4f);
     }
 
     private void FixedUpdate()

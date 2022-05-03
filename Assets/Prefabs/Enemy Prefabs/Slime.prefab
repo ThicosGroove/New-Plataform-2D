@@ -420,7 +420,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 411c98cab943d9449a110e88a331b1a7, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
@@ -442,7 +442,7 @@ MonoBehaviour:
   plataformLayerMask:
     serializedVersion: 2
     m_Bits: 8
-  healtBar: {fileID: 3295867770940982876}
+  healtBar: {fileID: 4507839640689629805}
   filledHealtBar: {fileID: 470065543460566680}
   _patrolSpeed: 1
   _chaseSpeed: 1.5

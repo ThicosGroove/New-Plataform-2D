@@ -16,6 +16,7 @@ public class EnemyBat : AEnemy
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        state = State.Patrol;
 
         patrolSpeed = _patrolSpeed;
         chaseSpeed = _chaseSpeed;
@@ -30,8 +31,21 @@ public class EnemyBat : AEnemy
 
     private void FixedUpdate()
     {
-        MovementTowardsPlayer(player);
-        DistanceToWake(player, distanceToWake);
+        switch (state)
+        {
+            case State.Sleep:
+                break;
+            case State.Patrol:
+                PatrolMovement();
+                DistanceToWake(player, distanceToWake);
+                break;
+            case State.Chase:
+                MovementTowardsPlayer(player);
+                DistanceToWake(player, distanceToWake);
+                break;
+            default:
+                break;
+        }
     }
 
     protected override void Die()

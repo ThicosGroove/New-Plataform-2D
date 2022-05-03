@@ -41,7 +41,6 @@ public class EnemySlime : AEnemy
             case State.Chase:
                 MovementTowardsPlayer(player);
                 DistanceToWake(player, distanceToWake);
-                StayOnGround();
                 break;
             default:
                 break;

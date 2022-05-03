@@ -6,7 +6,6 @@ public class PlayerController : MonoBehaviour
 {
     private Input_PlayerController input;
     private Rigidbody2D rb;
-    private BoxCollider2D boxCollider2D;
     private CapsuleCollider2D capsuleCollider2D;
     private Animator anim;
 
@@ -55,8 +54,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        boxCollider2D = GetComponent<BoxCollider2D>();
-        capsuleCollider2D = GetComponent<CapsuleCollider2D>();
+        capsuleCollider2D = GetComponentInChildren<CapsuleCollider2D>();
         anim = GetComponent<Animator>();
         fireRate = _fireRate;
 
@@ -65,8 +63,6 @@ public class PlayerController : MonoBehaviour
     //used in physics updates 
     private void FixedUpdate()
     {
-
-
         Move();
         Jump();
         BetterJump();
@@ -137,7 +133,7 @@ public class PlayerController : MonoBehaviour
     {
         float extraHeight = 0.5f;
 
-        raycastHit = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0f, Vector2.down, extraHeight, plataformLayerMask);
+        raycastHit = Physics2D.BoxCast(capsuleCollider2D.bounds.center, capsuleCollider2D.bounds.size, 0f, Vector2.down, extraHeight, plataformLayerMask);
 
         Color rayColor;
         if (raycastHit.collider != null)
@@ -150,7 +146,7 @@ public class PlayerController : MonoBehaviour
             rayColor = Color.red;
             anim.SetBool("isGrounded", false);
         }
-        Debug.DrawRay(boxCollider2D.bounds.center, Vector2.down * (extraHeight), rayColor);
+        Debug.DrawRay(capsuleCollider2D.bounds.center, Vector2.down * (extraHeight), rayColor);
 
         return raycastHit.collider != null;
     }
