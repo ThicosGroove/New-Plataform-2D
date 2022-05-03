@@ -11,6 +11,8 @@ public abstract class AEnemy : MonoBehaviour
     protected float patrolSpeed { get; set; }
     protected float chaseSpeed { get; set; }
 
+    Vector2 lookDirection;
+
     [SerializeField] private GameObject healtBar;
     [SerializeField] private Image filledHealtBar;
 
@@ -29,6 +31,11 @@ public abstract class AEnemy : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
+    private void Start()
+    {
+        lookDirection = transform.eulerAngles;
+    }
+
     protected abstract void LostHealth();
 
     protected abstract void Die();
@@ -44,12 +51,21 @@ public abstract class AEnemy : MonoBehaviour
     protected virtual void MovementTowardsPlayer(GameObject target)
     {
         Vector3 playerPos = target.transform.position;
-        Vector2 dir = (playerPos - transform.position).normalized;
+        Vector2 playerDir = (playerPos - transform.position).normalized;
 
-        rb.MovePosition((Vector2)transform.position + (dir * chaseSpeed * Time.deltaTime));
-        //StayOnGround();
+        transform.eulerAngles = playerDir.x > 0f ? new Vector3(0f, 180f, 0f): Vector3.zero;
 
-        transform.eulerAngles = dir.x > 0f ? new Vector3(0f, 180f, 0f): Vector3.zero;
+        rb.velocity = new Vector2(playerDir.x * chaseSpeed, rb.velocity.y);
+    }
+
+    protected virtual void PatrolMovement()
+    {
+        int playerDir = 0;
+        transform.eulerAngles = playerDir > 0f ? new Vector3(0f, 180f, 0f) : Vector3.zero;
+
+        playerDir = transform.eulerAngles.y == 0 ? -1 : 1;
+
+        rb.velocity = new Vector2(playerDir * patrolSpeed, rb.velocity.y);
     }
 
     protected void DistanceToWake(GameObject target, float distToWake)
@@ -58,23 +74,25 @@ public abstract class AEnemy : MonoBehaviour
 
         float distanceToPlayer = Vector2.Distance(transform.position, playerPos);
 
-        if (distanceToPlayer < distToWake) 
-        {
-            state = State.Chase;
-        }
-        else
-        {
-            state = State.Patrol;
-        }
+        state = distanceToPlayer < distToWake ? State.Chase : State.Patrol;
     }
 
-    protected virtual void FreeMovement()
+    protected virtual void StayOnGround()
     {
-        int dir;
-        Vector2 lookDirection = transform.eulerAngles;
-        dir = lookDirection.y == 180f ? 1 : -1;
+        RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, Vector2.down, 3f, plataformLayerMask);
 
-        rb.velocity = new Vector2(dir * patrolSpeed, rb.velocity.y);
+        bool isGrounded = raycastHit2D.collider;
+
+        float maxHeight = 1f;
+        float distToGround = raycastHit2D.distance;
+        Debug.LogWarning(distToGround);
+
+        if (raycastHit2D.distance > distToGround)
+        {
+            raycastHit2D.distance = maxHeight;
+        }
+
+        //transform.position = new Vector2(rb.velocity.x, 3.66f);
     }
 
     protected virtual void Flip()
@@ -109,21 +127,4 @@ public abstract class AEnemy : MonoBehaviour
         }
     }
 
-    protected virtual void StayOnGround()
-    {
-        RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, Vector2.down, 3f, plataformLayerMask);
-
-        bool isGrounded = raycastHit2D.collider;
-
-        float maxHeight = 1f;
-        float distToGround = raycastHit2D.distance;
-        Debug.LogWarning(distToGround);
-
-        if (raycastHit2D.distance > distToGround)
-        {
-            raycastHit2D.distance = maxHeight;
-        }
-
-        //transform.position = new Vector2(rb.velocity.x, 3.66f);
-    }
 }

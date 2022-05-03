@@ -86,9 +86,9 @@ GameObject:
   - component: {fileID: 493281927254927465}
   - component: {fileID: 5577602869221701597}
   - component: {fileID: 6007690069491176811}
-  - component: {fileID: -3083770185023999180}
-  - component: {fileID: 3963302671149588926}
   - component: {fileID: 7722099359984557732}
+  - component: {fileID: 3963302671149588926}
+  - component: {fileID: -3083770185023999180}
   m_Layer: 0
   m_Name: Bat
   m_TagString: Untagged
@@ -150,7 +150,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: 1410fe0f04735954f93f7dd7cde6dc23, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -181,6 +181,49 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7722099359984557732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4425359341289329321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64a9bbba1ae7dc34490a6816b965e3c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  plataformLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  healtBar: {fileID: 4831544861013811950}
+  filledHealtBar: {fileID: 7871152486211809916}
+  _patrolSpeed: 2
+  _chaseSpeed: 1
+  maxHealth: 2
+  currentHealth: 0
+  distanceToWake: 7
+--- !u!50 &3963302671149588926
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4425359341289329321}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!61 &-3083770185023999180
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -207,49 +250,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!50 &3963302671149588926
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4425359341289329321}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
---- !u!114 &7722099359984557732
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4425359341289329321}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64a9bbba1ae7dc34490a6816b965e3c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  plataformLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  healtBar: {fileID: 4831544861013811950}
-  filledHealtBar: {fileID: 7871152486211809916}
-  _patrolSpeed: 2
-  _chaseSpeed: 1
-  maxHealth: 2
-  currentHealth: 0
-  distanceToWake: 7
 --- !u!1 &4602320952279486132
 GameObject:
   m_ObjectHideFlags: 0

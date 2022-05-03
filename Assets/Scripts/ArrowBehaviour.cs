@@ -38,6 +38,8 @@ public class ArrowBehaviour : MonoBehaviour
             particle.Play();
             KnockBack(collision.gameObject);
 
+            //rb.velocity = Vector2.zero;
+            rb.bodyType = RigidbodyType2D.Kinematic;
             Destroy(gameObject, 1f);
         }
     }

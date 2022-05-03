@@ -36,7 +36,7 @@ public class EnemyBlob : AEnemy
             case State.Sleep:
                 break;
             case State.Patrol:
-                FreeMovement();
+                PatrolMovement();
                 DistanceToWake(player, distanceToWake);
                 break;
             case State.Chase:
