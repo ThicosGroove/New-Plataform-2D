@@ -12,22 +12,34 @@ public class CameraFollow : MonoBehaviour
 
     [SerializeField] private float smooth;
 
-    private Transform player;
+    GameObject player;
 
-    // Start is called before the first frame update
+    private Camera cam;
+
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("Player");
+        cam = Camera.main;
     }
 
     private void LateUpdate()
     {
-        Vector2 following = player.position;
+         NormalCameraBehaviour();
+    }
+
+    private void NormalCameraBehaviour()
+    {
+        Vector2 following = player.transform.position;
         float clampX = Mathf.Clamp(following.x, minX, maxX);
         float clampY = Mathf.Clamp(following.y, minY, maxY);
 
-        transform.position = Vector3.Lerp(transform.position, new Vector3(clampX, clampY, -10f) , smooth * Time.deltaTime);
-        //transform.position = Vector3.Lerp(transform.position, new Vector3(0f, clampY, -10f) , smooth * Time.deltaTime);
-
+        transform.position = Vector3.Lerp(transform.position, new Vector3(clampX, clampY, -10f), smooth * Time.deltaTime);
     }
+
+
+    public void HighPositionCameraBehaviour()
+    {
+        cam.orthographicSize = 20f;
+    }
+
 }

@@ -130,7 +130,7 @@ MonoBehaviour:
   rollSpeed: 30
   arrowPrefab: {fileID: 2704019606709598039, guid: 3e212a099c4f9b84998340370d86455c, type: 3}
   bow: {fileID: 3935759770119700777}
-  bowForce: 500
+  bowForce: 13
   _fireRate: 0.5
 --- !u!114 &1852258512983953768
 MonoBehaviour:

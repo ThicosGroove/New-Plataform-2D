@@ -16,6 +16,7 @@ public class EnemyBat : AEnemy
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+
         state = State.Patrol;
 
         patrolSpeed = _patrolSpeed;

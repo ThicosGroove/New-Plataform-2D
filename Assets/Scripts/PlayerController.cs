@@ -172,11 +172,6 @@ public class PlayerController : MonoBehaviour
             anim.SetBool("isRolling", false);
 
         }
-
-        // ao apertar o botao
-        //pequeno dash durante 0.5 segundos
-        // animação
-        //desliga o collisor de dano
     }
 
     void StayOnGround()
@@ -185,9 +180,6 @@ public class PlayerController : MonoBehaviour
 
         transform.position = new Vector2(transform.position.x, transform.position.y - distToGround);
         rb.velocity = new Vector2(rb.velocity.x, 0f);
-
-        Debug.LogWarning(distToGround);
-
     }
 
     void Attack()

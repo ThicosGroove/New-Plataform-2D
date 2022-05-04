@@ -200,10 +200,10 @@ MonoBehaviour:
   healtBar: {fileID: 4831544861013811950}
   filledHealtBar: {fileID: 7871152486211809916}
   _patrolSpeed: 2
-  _chaseSpeed: 1
+  _chaseSpeed: 4
   maxHealth: 2
   currentHealth: 0
-  distanceToWake: 5
+  distanceToWake: 7
 --- !u!50 &3963302671149588926
 Rigidbody2D:
   serializedVersion: 4

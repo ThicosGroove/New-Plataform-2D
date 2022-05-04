@@ -18,6 +18,8 @@ public class PlayerManager : MonoBehaviour
     {
         currentHealth = playerMaxHeatlh;
         boxCollider2D = GetComponentInChildren<BoxCollider2D>();
+
+        boxCollider2D.isTrigger = true;
     }
 
     private void Update()
@@ -50,9 +52,8 @@ public class PlayerManager : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.GetComponent<AEnemy>() && this.boxCollider2D)
+        if (collision.gameObject.GetComponent<AEnemy>())
         {
-            Debug.LogWarning("Tomou dano inimigo");
             LostHealth();
         }
 
@@ -60,7 +61,5 @@ public class PlayerManager : MonoBehaviour
         {
             Die();
         }
-
     }
-
 }

@@ -10,11 +10,13 @@ public class EnemySlime : AEnemy
     [SerializeField] private float currentHealth;
 
     [SerializeField] float distanceToWake;
+
     private GameObject player;
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+
         state = State.Patrol;
 
         patrolSpeed = _patrolSpeed;

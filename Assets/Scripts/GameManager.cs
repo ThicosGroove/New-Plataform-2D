@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-
 public class GameManager : MonoBehaviour
 {
     [SerializeField] GameObject panelPauseMenu;
@@ -18,7 +17,6 @@ public class GameManager : MonoBehaviour
         Play,
         Paused
     }
-
 
     private void Awake()
     {
@@ -35,14 +33,16 @@ public class GameManager : MonoBehaviour
         input.Disable();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
+        GameSavingData.Instance._level = SceneManager.GetActiveScene().buildIndex;
+
+        GameSavingData.Instance.SaveNewData();
+
         state = GameState.Play;
         panelPauseMenu.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
         PressPauseOnController();
@@ -89,6 +89,6 @@ public class GameManager : MonoBehaviour
 
     public void ReloadScene()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
