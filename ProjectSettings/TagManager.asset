@@ -9,6 +9,7 @@ TagManager:
   - Ground
   - Wall
   - Bow
+  - Treasure
   layers:
   - Default
   - TransparentFX

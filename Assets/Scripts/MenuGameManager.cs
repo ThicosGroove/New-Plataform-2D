@@ -14,6 +14,7 @@ public class MenuGameManager : MonoBehaviour
     [SerializeField] GameObject MainMenu;
     [SerializeField] GameObject OnFirstPlay;
     [SerializeField] GameObject OnLoadScreen;
+    [SerializeField] GameObject OnControlScreen;
 
     [Header("On First Play Texts")]
     [SerializeField] TMP_InputField inputField;
@@ -30,7 +31,8 @@ public class MenuGameManager : MonoBehaviour
     {
         MainMenu,
         OnFirstPlay,
-        OnLoadScreen
+        OnLoadScreen,
+        OnControlsScreen
     }
 
     private void Start()
@@ -40,10 +42,7 @@ public class MenuGameManager : MonoBehaviour
         loadPlayerName.text = "Player: " + GameSavingData.Instance._name;
         loadPlayerLevel.text = "Current Level: " + GameSavingData.Instance._level;
         errorMessageToPlayer.text = "";
-        errorMessageFirstPlay.text = "";
-
-        Debug.LogWarning(Application.persistentDataPath);
-        
+        errorMessageFirstPlay.text = "";     
     }
 
     private void Update()
@@ -54,26 +53,31 @@ public class MenuGameManager : MonoBehaviour
                 MainMenu.SetActive(true);
                 OnFirstPlay.SetActive(false);
                 OnLoadScreen.SetActive(false);
+                OnControlScreen.SetActive(false);
                 break;
             case State.OnFirstPlay:
                 MainMenu.SetActive(false);
                 OnFirstPlay.SetActive(true);
                 OnLoadScreen.SetActive(false);
+                OnControlScreen.SetActive(false);
                 break;
             case State.OnLoadScreen:
                 MainMenu.SetActive(false);
                 OnFirstPlay.SetActive(false);
                 OnLoadScreen.SetActive(true);
+                OnControlScreen.SetActive(false);
+                break;
+            case State.OnControlsScreen:
+                MainMenu.SetActive(false);
+                OnFirstPlay.SetActive(false);
+                OnLoadScreen.SetActive(false);
+                OnControlScreen.SetActive(true);
                 break;
             default:
                 break;
         }
     }
 
-    public void ReturnToMenuButton()
-    {
-        state = State.MainMenu;
-    }
 
     public void MainMenuPlayButton()
     {
@@ -97,7 +101,6 @@ public class MenuGameManager : MonoBehaviour
         if (GameSavingData.Instance._level != 0 && GameSavingData.Instance._name != null)
         {
             SceneManager.LoadScene(GameSavingData.Instance._level);
-            Debug.LogWarning(GameSavingData.Instance._level);
         }
         else
         {
@@ -115,6 +118,16 @@ public class MenuGameManager : MonoBehaviour
         {
             errorMessageFirstPlay.text = "You have to enter a name to Play";
         }
+    }
+
+    public void ControlsButton()
+    {
+        state = State.OnControlsScreen;
+    }
+
+    public void ReturnToMenuButton()
+    {
+        state = State.MainMenu;
     }
 
     public void QuitButton()

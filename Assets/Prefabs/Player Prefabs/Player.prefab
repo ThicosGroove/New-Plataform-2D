@@ -146,7 +146,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
   PlayerFilledHealthBar: {fileID: 0}
-  playerMaxHeatlh: 0
+  playerMaxHeatlh: 5
 --- !u!50 &1852258512983953771
 Rigidbody2D:
   serializedVersion: 4

@@ -3,24 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] GameObject panelPauseMenu;
+    [SerializeField] GameObject OnControlScreen;
 
     private Input_PlayerController input;
-    private float inputPause;
+    private bool inputPause;
 
     private GameState state;
     enum GameState
     {
         Play,
-        Paused
+        Paused,
+        OnControlScreen
     }
 
     private void Awake()
     {
-        input = new Input_PlayerController();
+        input = new Input_PlayerController();      
     }
 
     private void OnEnable()
@@ -35,24 +38,43 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        GameSavingData.Instance._level = SceneManager.GetActiveScene().buildIndex;
+        if (GameSavingData.Instance != null)
+        {
+            GameSavingData.Instance._level = SceneManager.GetActiveScene().buildIndex;
 
-        GameSavingData.Instance.SaveNewData();
+            GameSavingData.Instance.SaveNewData();
+        }  
 
         state = GameState.Play;
-        panelPauseMenu.SetActive(false);
     }
 
     void Update()
     {
-        PressPauseOnController();
+        switch (state)
+        {
+            case GameState.Play:
+                panelPauseMenu.SetActive(false);
+                OnControlScreen.SetActive(false);
+                PressPauseOnController();
+                break;
+            case GameState.Paused:
+                panelPauseMenu.SetActive(true);
+                OnControlScreen.SetActive(false);
+                PressPauseOnController();
+                break;
+            case GameState.OnControlScreen:
+                OnControlScreen.SetActive(true);
+                break;
+            default:
+                break;
+        }
     }
 
     private void PressPauseOnController()
     {
-        inputPause = input.Player.PauseController.ReadValue<float>();
+        inputPause = input.Player.PauseController.WasPressedThisFrame();
 
-        if (inputPause > 0)
+        if (inputPause)
         {
             if (state == GameState.Play)
             {
@@ -67,28 +89,47 @@ public class GameManager : MonoBehaviour
 
     public void PauseButton()
     {
-        if (state == GameState.Play)
-        {
-            Time.timeScale = 0;
-            state = GameState.Paused;
+        Time.timeScale = 0;
+        state = GameState.Paused;
 
-            panelPauseMenu.SetActive(true);
-        }
+        panelPauseMenu.SetActive(true);
     }
 
     public void ResumeButton()
     {
-        if (state == GameState.Paused)
-        {
-            Time.timeScale = 1;
-            state = GameState.Play;
+        Time.timeScale = 1;
+        state = GameState.Play;
 
-            panelPauseMenu.SetActive(false);
-        }
+        panelPauseMenu.SetActive(false);
+    }
+
+    public void ControlButton()
+    {
+        state = GameState.OnControlScreen;
+
+        OnControlScreen.SetActive(true);
+    }
+
+    public void BackFromControlButton()
+    {
+        OnControlScreen.SetActive(false);
+
+        state = GameState.Paused;
+    }
+
+    public void QuitButton()
+    {
+        //Got to main menu
+        SceneManager.LoadScene(0);
     }
 
     public void ReloadScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void GoToNextLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }
