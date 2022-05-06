@@ -64,7 +64,6 @@ public class PlayerManager : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Treasure"))
         {
-            Debug.LogWarning("VAi");
             gameManager.GoToNextLevel();
         }
     }

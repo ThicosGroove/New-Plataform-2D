@@ -59,8 +59,5 @@ public class EnemyBlob : AEnemy
     protected override void Die()
     {
         Destroy(gameObject);
-    }
-
-
- 
+    } 
 }
