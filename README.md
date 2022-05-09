@@ -23,6 +23,10 @@ Currently avaliable on [itch.io][3]. Working on mobile version 😊.
     
    <p align="center"> <img src="Gifs for Git/healthBar.gif" width="350"/> <img src="Gifs for Git/buttons.gif" width="350"/> 
   
+## Save
+  
+  The game saves the progress automatically when the player reaches a new level. The player will always start from the begin of the level.     
+      <p align="center"> <img src="Gifs for Git/save.gif" width="500"/> 
   
 [1]: https://cursos.dankicode.com/unity  
 [2]: https://learn.unity.com/pathway/junior-programmer  
