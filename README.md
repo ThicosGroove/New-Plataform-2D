@@ -4,7 +4,7 @@
 <p align="center"> <img src="Gifs for Git/gameplay.gif" width="500"/>        
 
 ### My first 2D plataform. This is a project from a [Dunki Code][1] course. It's a begginer course that i took after finish the [Unity learn pathway][2], so i implemented some features way further the original intented. Every line of code was improved as well as gameplay and UI.
-Currently avaliable on [itch.io][3]. Working on mobile version 😊.  
+Currently avaliable on [itch.io][3] for windows and android.
   
 ## Gameplay
   
