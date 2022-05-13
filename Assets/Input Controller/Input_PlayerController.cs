@@ -230,17 +230,6 @@ public partial class @Input_PlayerController : IInputActionCollection2, IDisposa
                 },
                 {
                     ""name"": """",
-                    ""id"": ""767bb097-aa90-4f78-945e-87f7a6499ae6"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Attack"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""8a00c003-0862-4233-9558-6b61f1233030"",
                     ""path"": ""<XInputController>/buttonWest"",
                     ""interactions"": """",
@@ -254,6 +243,17 @@ public partial class @Input_PlayerController : IInputActionCollection2, IDisposa
                     ""name"": """",
                     ""id"": ""58e96088-1445-4154-835c-fda299d72423"",
                     ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause Controller"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""21252111-f317-4bd7-bf2d-241432b5bfad"",
+                    ""path"": ""<Touchscreen>/primaryTouch/tap"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] GameObject panelPauseMenu;
     [SerializeField] GameObject OnControlScreen;
+    [SerializeField] GameObject MobileButtons;
 
     private Input_PlayerController input;
     private bool inputPause;
@@ -55,14 +56,17 @@ public class GameManager : MonoBehaviour
             case GameState.Play:
                 panelPauseMenu.SetActive(false);
                 OnControlScreen.SetActive(false);
+                MobileButtons.SetActive(true);
                 PressPauseOnController();
                 break;
             case GameState.Paused:
                 panelPauseMenu.SetActive(true);
                 OnControlScreen.SetActive(false);
+                MobileButtons.SetActive(true);
                 PressPauseOnController();
                 break;
             case GameState.OnControlScreen:
+                MobileButtons.SetActive(false);
                 OnControlScreen.SetActive(true);
                 break;
             default:
